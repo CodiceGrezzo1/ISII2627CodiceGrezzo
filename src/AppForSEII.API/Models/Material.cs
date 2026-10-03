@@ -11,4 +11,7 @@ public class Material
     public decimal StockGramos { get; set; }
 
     public ICollection<Pieza3D> Piezas3D { get; set; } = new List<Pieza3D>();
+
+    // Relación 1:N con LineaEncargo (rol: material seleccionado)
+    public List<LineaEncargo> LineasEncargo { get; set; } = new List<LineaEncargo>();
 }

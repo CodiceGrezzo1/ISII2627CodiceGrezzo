@@ -11,4 +11,6 @@ public class LineaEncargo
     public EncargoImpresion EncargoImpresion { get; set; } = null!;
 
     public Pieza3D Pieza3D { get; set; } = null!;
+
+    public Material Material { get; set; } = null!;
 }
