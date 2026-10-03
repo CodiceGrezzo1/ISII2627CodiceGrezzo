@@ -14,6 +14,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
 
     }
+    public DbSet<Material> Materiales { get; set; }
    
 
 
