@@ -9,4 +9,6 @@ public class LineaEncargo
 
     // Relación 1:N hacia EncargoImpresion (entidad principal)
     public EncargoImpresion EncargoImpresion { get; set; } = null!;
+
+    public Pieza3D Pieza3D { get; set; } = null!;
 }

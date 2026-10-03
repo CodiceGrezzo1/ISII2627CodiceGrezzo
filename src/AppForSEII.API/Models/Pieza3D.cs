@@ -9,4 +9,6 @@ public class Pieza3D
     
     
     // public ICollection<Material> MaterialesValidos { get; set; } = new HashSet<Material>();
+
+    public List<LineaEncargo> LineasEncargo { get; set; } = new List<LineaEncargo>();
 }
