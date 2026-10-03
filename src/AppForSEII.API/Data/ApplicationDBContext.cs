@@ -15,6 +15,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     }
    
+    public DbSet<EncargoImpresion> EncargoImpresiones{ get; set; }
 
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
