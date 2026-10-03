@@ -37,5 +37,9 @@ namespace AppForSEII.API.Models
         public MetodoPago MetodoPago { get; set; }
 
         // public LineaEncargo LineaEncargo { get; set; }
+        public Cliente Cliente { get; set; } = null!;
+
+        // Relación 1:N con LineaEncargo (entidad dependiente)
+    public List<LineaEncargo> LineasEncargo { get; set; } = new List<LineaEncargo>();
     }
 }
