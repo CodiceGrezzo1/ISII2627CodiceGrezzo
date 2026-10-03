@@ -15,7 +15,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     }
    
-
+    public DbSet<LineaEncargo> LineasEncargo { get; set; }
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
