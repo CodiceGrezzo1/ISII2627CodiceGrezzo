@@ -9,4 +9,6 @@ public class Material
     public decimal PrecioPorGramo { get; set; }
     
     public decimal StockGramos { get; set; }
+
+    public ICollection<Pieza3D> Piezas3D { get; set; } = new List<Pieza3D>();
 }

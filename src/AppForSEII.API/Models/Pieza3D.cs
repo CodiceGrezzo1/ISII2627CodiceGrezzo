@@ -8,7 +8,11 @@ public class Pieza3D
     public CategoriaPieza Categoria { get; set; }
     
     
-    // public ICollection<Material> MaterialesValidos { get; set; } = new HashSet<Material>();
+    public ICollection<Material> MaterialesValidos { get; set; } = new HashSet<Material>();
 
     public List<LineaEncargo> LineasEncargo { get; set; } = new List<LineaEncargo>();
+
+   
+
+
 }
