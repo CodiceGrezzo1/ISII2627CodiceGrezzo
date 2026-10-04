@@ -1,0 +1,4 @@
+@startuml
+hide methods
+!include Pieza3D.puml
+@enduml
