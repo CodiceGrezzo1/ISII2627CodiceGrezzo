@@ -34,6 +34,11 @@ namespace AppForSEII.API.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -93,6 +98,10 @@ namespace AppForSEII.API.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("AppForSEII.API.Models.EncargoImpresion", b =>
@@ -107,6 +116,10 @@ namespace AppForSEII.API.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ClienteId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(500)
@@ -138,7 +151,114 @@ namespace AppForSEII.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
                     b.ToTable("EncargoImpresiones");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.LineaEncargo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EncargoImpresionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Pieza3DId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrecioUnidad")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EncargoImpresionId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.HasIndex("Pieza3DId");
+
+                    b.ToTable("LineasEncargo");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("PrecioPorGramo")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("StockGramos")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Materiales");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.Pieza3D", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Categoria")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Peso")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piezas3D");
+                });
+
+            modelBuilder.Entity("MaterialPieza3D", b =>
+                {
+                    b.Property<int>("MaterialesValidosId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Piezas3DId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MaterialesValidosId", "Piezas3DId");
+
+                    b.HasIndex("Piezas3DId");
+
+                    b.ToTable("MaterialPieza3D");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -274,6 +394,69 @@ namespace AppForSEII.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AppForSEII.API.Models.Cliente", b =>
+                {
+                    b.HasBaseType("AppForSEII.API.Models.ApplicationUser");
+
+                    b.Property<string>("DireccionFacturacion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("Cliente");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.EncargoImpresion", b =>
+                {
+                    b.HasOne("AppForSEII.API.Models.Cliente", "Cliente")
+                        .WithMany("Encargos")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.LineaEncargo", b =>
+                {
+                    b.HasOne("AppForSEII.API.Models.EncargoImpresion", "EncargoImpresion")
+                        .WithMany("LineasEncargo")
+                        .HasForeignKey("EncargoImpresionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppForSEII.API.Models.Material", "Material")
+                        .WithMany("LineasEncargo")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppForSEII.API.Models.Pieza3D", "Pieza3D")
+                        .WithMany("LineasEncargo")
+                        .HasForeignKey("Pieza3DId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EncargoImpresion");
+
+                    b.Navigation("Material");
+
+                    b.Navigation("Pieza3D");
+                });
+
+            modelBuilder.Entity("MaterialPieza3D", b =>
+                {
+                    b.HasOne("AppForSEII.API.Models.Material", null)
+                        .WithMany()
+                        .HasForeignKey("MaterialesValidosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppForSEII.API.Models.Pieza3D", null)
+                        .WithMany()
+                        .HasForeignKey("Piezas3DId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -323,6 +506,26 @@ namespace AppForSEII.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.EncargoImpresion", b =>
+                {
+                    b.Navigation("LineasEncargo");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.Material", b =>
+                {
+                    b.Navigation("LineasEncargo");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.Pieza3D", b =>
+                {
+                    b.Navigation("LineasEncargo");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.Cliente", b =>
+                {
+                    b.Navigation("Encargos");
                 });
 #pragma warning restore 612, 618
         }
