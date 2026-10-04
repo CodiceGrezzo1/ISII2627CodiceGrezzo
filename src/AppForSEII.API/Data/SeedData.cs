@@ -72,7 +72,42 @@ namespace AppForSEII.API.Data {
         }
 
 
+        // --- NUEVO MÉTODO PARA CREAR ACCESORIOS ---
+        public static void SeedAccesorios(ApplicationDbContext dbContext) {
+            // Comprobamos si ya existen accesorios en la BD para evitar duplicados
+            if (!dbContext.Accesorios.Any()) {
 
+                // 1. Crear Accesorios asociados con sus atributos (Nombre, Categoria, Compatibilidad, CantidadDisponible, Precio)
+                var accesorio1 = new Accesorio {
+                    Nombre = "Boquilla de Acero Endurecido 0.4mm",
+                    Categoria = CategoriaAccesorio.Boquillas,
+                    Compatibilidad = "Creality Ender 3 / Prusa MK3",
+                    CantidadDisponible = 25,
+                    Precio = 12.50m
+                };
+
+                var accesorio2 = new Accesorio {
+                    Nombre = "Base Magnética PEI Texturizada",
+                    Categoria = CategoriaAccesorio.BasesImpresion, // Corregido: BasesImpresion con una sola 'b'
+                    Compatibilidad = "Bambu Lab X1 / P1P",
+                    CantidadDisponible = 10,
+                    Precio = 29.99m
+                };
+
+                var accesorio3 = new Accesorio {
+                    Nombre = "Kit de Limpieza de Boquillas y Pinzas",
+                    Categoria = CategoriaAccesorio.KitsLimpieza,
+                    Compatibilidad = "Universal",
+                    CantidadDisponible = 50,
+                    Precio = 8.75m
+                };
+
+                dbContext.Accesorios.AddRange(accesorio1, accesorio2, accesorio3);
+
+                // 2. Guardar cambios en la base de datos
+                dbContext.SaveChanges();
+            }
+        }
 
 
     }
