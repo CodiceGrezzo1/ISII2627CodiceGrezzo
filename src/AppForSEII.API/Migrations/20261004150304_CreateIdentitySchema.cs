@@ -12,6 +12,23 @@ namespace AppForSEII.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Accesorios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Categoria = table.Column<int>(type: "int", nullable: false),
+                    Compatibilidad = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CantidadDisponible = table.Column<int>(type: "int", nullable: false),
+                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accesorios", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -32,6 +49,8 @@ namespace AppForSEII.API.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
+                    DireccionFacturacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -158,6 +177,61 @@ namespace AppForSEII.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CompraAccesorios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FechaCompra = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NombreCliente = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ApellidosCliente = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DireccionEnvio = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    NumeroTelefono = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    PrecioTotal = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    MetodoPago = table.Column<int>(type: "int", nullable: false),
+                    ClienteId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompraAccesorios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CompraAccesorios_AspNetUsers_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LineaCompraAccesorios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreAccesorio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    PrecioUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AccesorioId = table.Column<int>(type: "int", nullable: false),
+                    CompraAccesoriosId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LineaCompraAccesorios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LineaCompraAccesorios_Accesorios_AccesorioId",
+                        column: x => x.AccesorioId,
+                        principalTable: "Accesorios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LineaCompraAccesorios_CompraAccesorios_CompraAccesoriosId",
+                        column: x => x.CompraAccesoriosId,
+                        principalTable: "CompraAccesorios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -196,6 +270,21 @@ namespace AppForSEII.API.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompraAccesorios_ClienteId",
+                table: "CompraAccesorios",
+                column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LineaCompraAccesorios_AccesorioId",
+                table: "LineaCompraAccesorios",
+                column: "AccesorioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LineaCompraAccesorios_CompraAccesoriosId",
+                table: "LineaCompraAccesorios",
+                column: "CompraAccesoriosId");
         }
 
         /// <inheritdoc />
@@ -217,7 +306,16 @@ namespace AppForSEII.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "LineaCompraAccesorios");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Accesorios");
+
+            migrationBuilder.DropTable(
+                name: "CompraAccesorios");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
