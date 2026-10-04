@@ -31,5 +31,13 @@ namespace AppForSEII.API.Models
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(8, 2)]
         public decimal PrecioReserva { get; set; }
+
+
+
+
+
+
+        // Relación: Una impresora puede estar en múltiples líneas de reserva
+        public IList<LineaReserva> Lineas { get; set; } = new List<LineaReserva>();
     }
 }

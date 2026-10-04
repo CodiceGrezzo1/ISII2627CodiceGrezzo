@@ -32,5 +32,19 @@ namespace AppForSEII.API.Models
 
         [Required]
         public MetodoPago MetodoPago { get; set; }
+
+
+
+
+
+        
+
+        // Relación: Una reserva contiene muchas líneas (Composición)
+        public IList<LineaReserva> Lineas { get; set; } = []; //sugerencia de que en esta version de C# no hay que escribir la ruta completa de una lista vacía
+
+        // Relación: Una reserva es realizada por un cliente
+        // (El Id es string porque hereda de IdentityUser)
+        public string ClienteId { get; set; } = string.Empty;
+        public Cliente Cliente { get; set; } = null!;
     }
 }
