@@ -17,5 +17,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-    public DbSet<CompraAccesorios> ComprasAccesorios { get; set; }
+    public DbSet<Accesorio> Accesorios { get; set; }
+    public DbSet<LineaCompraAccesorio> LineaCompraAccesorios { get; set; }
+    public DbSet<CompraAccesorios> CompraAccesorios { get; set; }
+
+
+
 }
