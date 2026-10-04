@@ -10,17 +10,17 @@ namespace AppForSEII.API.Models
 
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(100)]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El modelo es obligatorio")]
         [StringLength(100)]
-        public string Modelo { get; set; }
+        public string Modelo { get; set; } = string.Empty;
 
         [Required]
-        public TipoImpresora Tipo { get; set; }
+        public TipoImpresora Tipo { get; set; } 
 
         [StringLength(500)]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Currency)]
