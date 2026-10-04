@@ -19,4 +19,7 @@ public class LineaCompraAccesorio
         {
             return $"{NombreAccesorio} x{Cantidad} - Subtotal: {Subtotal:C}";
         }
+
+        public Accesorio Accesorio { get; set; }   = null!;
+        public CompraAccesorios CompraAccesorios { get; set; } = null!;
     }

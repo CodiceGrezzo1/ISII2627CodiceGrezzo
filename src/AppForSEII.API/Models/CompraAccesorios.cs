@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace AppForSEII.API.Models;
 
@@ -28,4 +29,7 @@ public class CompraAccesorios
     public decimal PrecioTotal { get; set; }
 
     public MetodoPago MetodoPago { get; set; }
+public List<LineaCompraAccesorio> LineasCompraAccesorio { get; set; } = new List<LineaCompraAccesorio>();
+public Cliente Cliente { get; set; } = null!;
+
 }
