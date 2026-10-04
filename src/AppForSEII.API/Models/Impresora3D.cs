@@ -23,12 +23,12 @@ namespace AppForSEII.API.Models
         public string Descripcion { get; set; } = string.Empty;
 
         [Required]
-        [DataType(DataType.Currency)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(8, 2)]
         public decimal PrecioKilovatioHora { get; set; }
 
         [Required]
-        [DataType(DataType.Currency)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(8, 2)]
         public decimal PrecioReserva { get; set; }
     }

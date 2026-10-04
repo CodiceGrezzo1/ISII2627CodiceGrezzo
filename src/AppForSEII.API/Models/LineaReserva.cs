@@ -12,7 +12,7 @@ namespace AppForSEII.API.Models
         public TiempoReserva TiempoReserva { get; set; }
 
         [Required]
-        [DataType(DataType.Currency)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(8, 2)]
         public decimal PrecioSubtotal { get; set; }
     }
