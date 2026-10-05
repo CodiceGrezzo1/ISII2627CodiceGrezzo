@@ -1,3 +1,5 @@
+using AppForSEII.API.Models;
+
 namespace AppForSEII.API.Data {
     public class SeedData {
         public static void Initialize(ApplicationDbContext dbContext, IServiceProvider serviceProvider, ILogger logger) {
@@ -19,8 +21,13 @@ namespace AppForSEII.API.Data {
                 logger.LogError(ex, "An error occurred seeding the Users in the Database.");
             }
 
- 
-
+            // ---> AQUÍ LLAMAMOS A TU MÉTODO PARA LAS IMPRESORAS <---
+            try {
+                SeedImpresoras3D(dbContext);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, "An error occurred seeding the 3D Printers in the Database.");
+            }
         }
 
         public static void SeedRoles(RoleManager<IdentityRole> roleManager, List<string> roles) {
@@ -52,7 +59,6 @@ namespace AppForSEII.API.Data {
                 }
             }
 
-
             if (userManager.FindByNameAsync("peter@uclm.es").Result == null) {
                 //A customer class has been defined because it has different attributes (purchase, rental, etc.)
                 ApplicationUser user = new ApplicationUser("3", "Peter", "Jackson", "peter@uclm.es");
@@ -68,12 +74,58 @@ namespace AppForSEII.API.Data {
 
                 }
             }
-
         }
 
+        // -- MÉTODO PARA CREAR IMPRESORAS 3D --
+        public static void SeedImpresoras3D(ApplicationDbContext dbContext)
+        {
+            // Comprobamos si ya existen impresoras 3D en la BD para evitar duplicados
+            if (!dbContext.Impresoras3D.Any())
+            {
+                var impresora1 = new Impresora3D
+                {
+                    Nombre = "Creality Ender 3 V2",
+                    Modelo = "Ender 3 V2",
+                    Tipo = TipoImpresora.Filamento,
+                    Descripcion = "Impresora de filamento ideal para prototipado rápido y principiantes.",
+                    PrecioKilovatioHora = 0.15m,
+                    PrecioReserva = 10.50m
+                };
 
+                var impresora2 = new Impresora3D
+                {
+                    Nombre = "Elegoo Mars 3 Pro",
+                    Modelo = "Mars 3 Pro",
+                    Tipo = TipoImpresora.Resina, 
+                    Descripcion = "Impresora de resina de alta precisión, perfecta para miniaturas.",
+                    PrecioKilovatioHora = 0.12m,
+                    PrecioReserva = 15.00m
+                };
 
+                var impresora3 = new Impresora3D
+                {
+                    Nombre = "Prusa i3 MK3S+",
+                    Modelo = "i3 MK3S+",
+                    Tipo = TipoImpresora.Filamento,
+                    Descripcion = "Impresora FDM de grado profesional, muy fiable y robusta.",
+                    PrecioKilovatioHora = 0.18m,
+                    PrecioReserva = 25.00m
+                };
 
+                var impresora4 = new Impresora3D
+                {
+                    Nombre = "Anycubic Photon Mono X",
+                    Modelo = "Photon Mono X",
+                    Tipo = TipoImpresora.Resina,
+                    Descripcion = "Impresora de resina de gran formato y alta velocidad de impresión.",
+                    PrecioKilovatioHora = 0.20m,
+                    PrecioReserva = 20.75m
+                };
 
+                // Añadir a la base de datos y guardar
+                dbContext.Impresoras3D.AddRange(impresora1, impresora2, impresora3, impresora4);
+                dbContext.SaveChanges();
+            }
+        }
     }
 }
