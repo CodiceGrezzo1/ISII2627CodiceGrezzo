@@ -75,6 +75,48 @@ namespace AppForSEII.API.Data {
                 }
             }
         }
+        
+public static void SeedModelos3D(ApplicationDbContext dbContext) 
+{
+    
+    if (!dbContext.Modelos3D.Any()) 
+    {
+        var modelo1 = new Modelo3D 
+        {
+            Nombre = "Jarrón Decorativo Moderno",
+            Categoria = "Decoración",
+            Formato = FormatoModelo3D.STL,
+            Precio = 12.50m
+        };
+
+        var modelo2 = new Modelo3D 
+        {
+            Nombre = "Soporte para Auriculares Magsafe",
+            Categoria = "Accesorios",
+            Formato = FormatoModelo3D.OBJ,
+            Precio = 24.99m
+        };
+
+        var modelo3 = new Modelo3D 
+        {
+            Nombre = "Figura Dragón Articulado",
+            Categoria = "Juegos y Figuras",
+            Formato = FormatoModelo3D.TresMF,
+            Precio = 8.50m
+        };
+
+        var modelo4 = new Modelo3D 
+        {
+            Nombre = "Engranaje de Recambio M3",
+            Categoria = "Repuestos",
+            Formato = FormatoModelo3D.STL,
+            Precio = 4.75m
+        };
+
+        dbContext.Modelos3D.AddRange(modelo1, modelo2, modelo3, modelo4);
+        dbContext.SaveChanges();
+    }
+}
 
         // -- MÉTODO PARA CREAR IMPRESORAS 3D --
         public static void SeedImpresoras3D(ApplicationDbContext dbContext)
