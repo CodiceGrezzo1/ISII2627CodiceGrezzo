@@ -1,3 +1,5 @@
+using AppForSEII.API.Models;
+
 namespace AppForSEII.API.Data {
     public class SeedData {
         public static void Initialize(ApplicationDbContext dbContext, IServiceProvider serviceProvider, ILogger logger) {
@@ -19,6 +21,13 @@ namespace AppForSEII.API.Data {
                 logger.LogError(ex, "An error occurred seeding the Users in the Database.");
             }
 
+            // ---> AQUÍ LLAMAMOS A TU MÉTODO PARA LAS IMPRESORAS <---
+            try {
+                SeedImpresoras3D(dbContext);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, "An error occurred seeding the 3D Printers in the Database.");
+            }
             // --- NUEVO: Seeding de Piezas3D y Materiales ---
             try {
                 SeedPiezas3D(dbContext);
@@ -61,9 +70,107 @@ namespace AppForSEII.API.Data {
 
                 if (result.IsCompletedSuccessfully) {
                     userManager.AddToRoleAsync(user, roles[2]).Wait();
+
                 }
             }
         }
+        
+public static void SeedModelos3D(ApplicationDbContext dbContext) 
+{
+    
+    if (!dbContext.Modelos3D.Any()) 
+    {
+        var modelo1 = new Modelo3D 
+        {
+            Nombre = "Jarrón Decorativo Moderno",
+            Categoria = "Decoración",
+            Formato = FormatoModelo3D.STL,
+            Precio = 12.50m
+        };
+
+        var modelo2 = new Modelo3D 
+        {
+            Nombre = "Soporte para Auriculares Magsafe",
+            Categoria = "Accesorios",
+            Formato = FormatoModelo3D.OBJ,
+            Precio = 24.99m
+        };
+
+        var modelo3 = new Modelo3D 
+        {
+            Nombre = "Figura Dragón Articulado",
+            Categoria = "Juegos y Figuras",
+            Formato = FormatoModelo3D.TresMF,
+            Precio = 8.50m
+        };
+
+        var modelo4 = new Modelo3D 
+        {
+            Nombre = "Engranaje de Recambio M3",
+            Categoria = "Repuestos",
+            Formato = FormatoModelo3D.STL,
+            Precio = 4.75m
+        };
+
+        dbContext.Modelos3D.AddRange(modelo1, modelo2, modelo3, modelo4);
+        dbContext.SaveChanges();
+    }
+}
+
+        // -- MÉTODO PARA CREAR IMPRESORAS 3D --
+        public static void SeedImpresoras3D(ApplicationDbContext dbContext)
+        {
+            // Comprobamos si ya existen impresoras 3D en la BD para evitar duplicados
+            if (!dbContext.Impresoras3D.Any())
+            {
+                var impresora1 = new Impresora3D
+                {
+                    Nombre = "Creality Ender 3 V2",
+                    Modelo = "Ender 3 V2",
+                    Tipo = TipoImpresora.Filamento,
+                    Descripcion = "Impresora de filamento ideal para prototipado rápido y principiantes.",
+                    PrecioKilovatioHora = 0.15m,
+                    PrecioReserva = 10.50m
+                };
+
+                var impresora2 = new Impresora3D
+                {
+                    Nombre = "Elegoo Mars 3 Pro",
+                    Modelo = "Mars 3 Pro",
+                    Tipo = TipoImpresora.Resina, 
+                    Descripcion = "Impresora de resina de alta precisión, perfecta para miniaturas.",
+                    PrecioKilovatioHora = 0.12m,
+                    PrecioReserva = 15.00m
+                };
+
+                var impresora3 = new Impresora3D
+                {
+                    Nombre = "Prusa i3 MK3S+",
+                    Modelo = "i3 MK3S+",
+                    Tipo = TipoImpresora.Filamento,
+                    Descripcion = "Impresora FDM de grado profesional, muy fiable y robusta.",
+                    PrecioKilovatioHora = 0.18m,
+                    PrecioReserva = 25.00m
+                };
+
+                var impresora4 = new Impresora3D
+                {
+                    Nombre = "Anycubic Photon Mono X",
+                    Modelo = "Photon Mono X",
+                    Tipo = TipoImpresora.Resina,
+                    Descripcion = "Impresora de resina de gran formato y alta velocidad de impresión.",
+                    PrecioKilovatioHora = 0.20m,
+                    PrecioReserva = 20.75m
+                };
+
+                // Añadir a la base de datos y guardar
+                dbContext.Impresoras3D.AddRange(impresora1, impresora2, impresora3, impresora4);
+                dbContext.SaveChanges();
+            }
+        }
+                
+            
+        
 
         // --- NUEVO MÉTODO PARA CREAR PIEZAS 3D Y MATERIALES ---
         public static void SeedPiezas3D(ApplicationDbContext dbContext) {
