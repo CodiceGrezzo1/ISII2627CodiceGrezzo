@@ -76,7 +76,7 @@ namespace AppForSEII.API.Data {
             }
         }
 
-        // --- MÉTODO PARA CREAR IMPRESORAS 3D ---
+        // -- MÉTODO PARA CREAR IMPRESORAS 3D --
         public static void SeedImpresoras3D(ApplicationDbContext dbContext)
         {
             // Comprobamos si ya existen impresoras 3D en la BD para evitar duplicados
