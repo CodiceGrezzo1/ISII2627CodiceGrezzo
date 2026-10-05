@@ -4,6 +4,7 @@ using AppForSEII.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppForSEII.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261005081810_CreateIdentitySchema")]
+    partial class CreateIdentitySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,7 +107,6 @@ namespace AppForSEII.API.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("CompraModelo3D", b =>
             modelBuilder.Entity("AppForSEII.API.Models.Impresora3D", b =>
                 {
                     b.Property<int>("Id")
@@ -113,46 +115,6 @@ namespace AppForSEII.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApellidosCliente")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClienteId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CorreoElectronico")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DireccionFacturacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaCompra")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MetodoPago")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NombreCliente")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("PrecioTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.ToTable("ComprasModelo3D");
-                });
-
-            modelBuilder.Entity("LicenciaModelo3D", b =>
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -192,19 +154,6 @@ namespace AppForSEII.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("FechaExpiracion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LicenciasModelo3D");
-                });
-
-            modelBuilder.Entity("LineaCompraModelo", b =>
                     b.Property<int>("Impresora3DId")
                         .HasColumnType("int");
 
@@ -235,28 +184,6 @@ namespace AppForSEII.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CantidadLicencias")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompraModelo3DId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Modelo3DId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("PrecioUnidad")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Subtotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompraModelo3DId");
-
-                    b.HasIndex("Modelo3DId");
-
-                    b.ToTable("LineaCompraModelos");
                     b.Property<string>("ApellidosCliente")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -426,38 +353,6 @@ namespace AppForSEII.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Modelo3D", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Categoria")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Formato")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LicenciaModelo3DId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LicenciaModelo3DId");
-
-                    b.ToTable("Modelos3D");
-                });
-
             modelBuilder.Entity("AppForSEII.API.Models.Cliente", b =>
                 {
                     b.HasBaseType("AppForSEII.API.Models.ApplicationUser");
@@ -468,34 +363,6 @@ namespace AppForSEII.API.Migrations
                     b.HasDiscriminator().HasValue("Cliente");
                 });
 
-            modelBuilder.Entity("CompraModelo3D", b =>
-                {
-                    b.HasOne("AppForSEII.API.Models.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("LineaCompraModelo", b =>
-                {
-                    b.HasOne("CompraModelo3D", "CompraModelo3D")
-                        .WithMany("LineasCompraModelo")
-                        .HasForeignKey("CompraModelo3DId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Modelo3D", "Modelo3D")
-                        .WithMany("LineasCompraModelo")
-                        .HasForeignKey("Modelo3DId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CompraModelo3D");
-
-                    b.Navigation("Modelo3D");
             modelBuilder.Entity("AppForSEII.API.Models.LineaReserva", b =>
                 {
                     b.HasOne("AppForSEII.API.Models.Impresora3D", "Impresora3D")
@@ -577,30 +444,6 @@ namespace AppForSEII.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Modelo3D", b =>
-                {
-                    b.HasOne("LicenciaModelo3D", "LicenciaModelo3D")
-                        .WithMany("Modelos3D")
-                        .HasForeignKey("LicenciaModelo3DId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LicenciaModelo3D");
-                });
-
-            modelBuilder.Entity("CompraModelo3D", b =>
-                {
-                    b.Navigation("LineasCompraModelo");
-                });
-
-            modelBuilder.Entity("LicenciaModelo3D", b =>
-                {
-                    b.Navigation("Modelos3D");
-                });
-
-            modelBuilder.Entity("Modelo3D", b =>
-                {
-                    b.Navigation("LineasCompraModelo");
             modelBuilder.Entity("AppForSEII.API.Models.Impresora3D", b =>
                 {
                     b.Navigation("Lineas");
