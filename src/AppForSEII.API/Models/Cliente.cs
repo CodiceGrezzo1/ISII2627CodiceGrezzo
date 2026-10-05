@@ -12,4 +12,6 @@ public class Cliente: ApplicationUser
 
     public string? DireccionFacturacion {get;set;}
     public List<EncargoImpresion> Encargos { get; set; } = new List<EncargoImpresion>();
+    List<CompraAccesorios> CompraAccesorios { get; set; } = new List<CompraAccesorios>();
+
 }

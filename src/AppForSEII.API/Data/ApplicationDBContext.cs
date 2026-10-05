@@ -30,6 +30,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<LicenciaModelo3D> LicenciasModelo3D { get; set; }
     
     public DbSet<LineaCompraModelo> LineaCompraModelos { get; set; }
+    public DbSet<Accesorio> Accesorios { get; set; }
+    public DbSet<LineaCompraAccesorio> LineaCompraAccesorios { get; set; }
+    public DbSet<CompraAccesorios> CompraAccesorios { get; set; }
 
 
     //public DbSet<MetodoPago> MetodoPagos { get; set; }   las enum no necesitan su propio DbSet
