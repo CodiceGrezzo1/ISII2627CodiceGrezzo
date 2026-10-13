@@ -1,25 +1,41 @@
-public class LineaCompraAccesorio
+namespace AppForSEII.API.Models
+{
+    public class LineaCompraAccesorio
     {
         public int Id { get; set; }
+        
         public string NombreAccesorio { get; set; }
+        
         public int Cantidad { get; set; }
+        
         public decimal PrecioUnitario { get; set; }
 
+        // Propiedad calculada (no requiere inicialización en el constructor)
         public decimal Subtotal => Cantidad * PrecioUnitario;
 
-        public LineaCompraAccesorio(int id, string nombreAccesorio, int cantidad, decimal precioUnitario)
+        public Accesorio Accesorio { get; set; }
+        
+        public CompraAccesorios CompraAccesorios { get; set; }
+
+        // 1. Constructor por defecto (obligatorio para Entity Framework Core)
+        public LineaCompraAccesorio()
         {
-            Id = id;
+            NombreAccesorio = string.Empty;
+        }
+
+        // 2. Constructor parametrizado para facilitar la creación de instancias
+        public LineaCompraAccesorio(string nombreAccesorio, int cantidad, decimal precioUnitario, Accesorio accesorio, CompraAccesorios compraAccesorios)
+        {
             NombreAccesorio = nombreAccesorio;
             Cantidad = cantidad;
             PrecioUnitario = precioUnitario;
+            Accesorio = accesorio;
+            CompraAccesorios = compraAccesorios;
         }
 
         public override string ToString()
         {
-            return $"{NombreAccesorio} x{Cantidad} - Subtotal: {Subtotal:C}";
+            return $"{NombreAccesorio} x{Cantidad} Subtotal: {Subtotal:C}";
         }
-
-        public Accesorio Accesorio { get; set; }   = null!;
-        public CompraAccesorios CompraAccesorios { get; set; } = null!;
     }
+}

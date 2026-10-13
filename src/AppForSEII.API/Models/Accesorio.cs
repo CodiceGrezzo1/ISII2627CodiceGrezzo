@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace AppForSEII.API.Models
 {
@@ -29,6 +30,25 @@ namespace AppForSEII.API.Models
         [Range(0.01, 10000.00, ErrorMessage = "El precio debe ser mayor que 0.")]
         public decimal Precio { get; set; }
 
-        public IList<LineaCompraAccesorio> LineaCompraAccesorios { get; set; } = new List<LineaCompraAccesorio>();
+        public IList<LineaCompraAccesorio> LineaCompraAccesorios { get; set; }
+
+        // 1. Constructor por defecto (obligatorio para Entity Framework Core)
+        public Accesorio()
+        {
+            Nombre = string.Empty;
+            Compatibilidad = string.Empty;
+            LineaCompraAccesorios = new List<LineaCompraAccesorio>();
+        }
+
+        // 2. Constructor parametrizado para facilitar la creación de instancias
+        public Accesorio(string nombre, CategoriaAccesorio categoria, string compatibilidad, int cantidadDisponible, decimal precio)
+        {
+            Nombre = nombre;
+            Categoria = categoria;
+            Compatibilidad = compatibilidad;
+            CantidadDisponible = cantidadDisponible;
+            Precio = precio;
+            LineaCompraAccesorios = new List<LineaCompraAccesorio>();
+        }
     }
 }
