@@ -6,10 +6,10 @@ namespace AppForSEII.API.Models;
 public class Material
 {
     [Key]
-public int Id { get; set; }
+    public int Id { get; set; }
 
     [StringLength(50, MinimumLength = 2, ErrorMessage = "El nombre debe tener entre 2 y 50 caracteres")]
-    public string Nombre { get; set; } = string.Empty;
+    public string Nombre { get; set; }
 
     [Precision(18, 2)]
     public decimal PrecioPorGramo { get; set; }
@@ -19,8 +19,26 @@ public int Id { get; set; }
     public decimal StockGramos { get; set; }
 
     // Relación 1:N con LineaEncargo
-    public List<LineaEncargo> LineasEncargo { get; set; } = new List<LineaEncargo>();
+    public List<LineaEncargo> LineasEncargo { get; set; }
 
     // Relación M:N con Pieza3D
-    public ICollection<Pieza3D> Piezas3D { get; set; } = new List<Pieza3D>();
+    public ICollection<Pieza3D> Piezas3D { get; set; }
+
+    // 1. Constructor por defecto (obligatorio para Entity Framework Core)
+    public Material()
+    {
+        Nombre = string.Empty;
+        LineasEncargo = new List<LineaEncargo>();
+        Piezas3D = new List<Pieza3D>();
+    }
+
+    // 2. Constructor parametrizado para facilitar la creación de instancias
+    public Material(string nombre, decimal precioPorGramo, decimal stockGramos)
+    {
+        Nombre = nombre;
+        PrecioPorGramo = precioPorGramo;
+        StockGramos = stockGramos;
+        LineasEncargo = new List<LineaEncargo>();
+        Piezas3D = new List<Pieza3D>();
+    }
 }
