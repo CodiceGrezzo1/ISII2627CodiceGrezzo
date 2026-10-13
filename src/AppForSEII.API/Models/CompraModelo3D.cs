@@ -28,7 +28,7 @@ public class CompraModelo3D
     [Required]
     public MetodoPago MetodoPago { get; set; }
 
-    public Cliente Cliente { get; set; }
+    public required Cliente Cliente { get; set; }
 
     public List<LineaCompraModelo> LineasCompraModelo { get; set; }
 
@@ -39,7 +39,6 @@ public class CompraModelo3D
         ApellidosCliente = string.Empty;
         CorreoElectronico = string.Empty;
         DireccionFacturacion = string.Empty;
-        Cliente = null!;
         LineasCompraModelo = new List<LineaCompraModelo>();
     }
 
