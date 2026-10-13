@@ -32,7 +32,7 @@ public class CompraAccesorios
 
     public MetodoPago MetodoPago { get; set; }
     
-    public Cliente Cliente { get; set; }
+    public required Cliente Cliente { get; set; }
     
     public List<LineaCompraAccesorio> LineasCompraAccesorio { get; set; }
 

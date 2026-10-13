@@ -13,9 +13,9 @@ namespace AppForSEII.API.Models
         // Propiedad calculada (no requiere inicialización en el constructor)
         public decimal Subtotal => Cantidad * PrecioUnitario;
 
-        public Accesorio Accesorio { get; set; }
+        public required Accesorio Accesorio { get; set; }
         
-        public CompraAccesorios CompraAccesorios { get; set; }
+        public required CompraAccesorios CompraAccesorios { get; set; }
 
         // 1. Constructor por defecto (obligatorio para Entity Framework Core)
         public LineaCompraAccesorio()
