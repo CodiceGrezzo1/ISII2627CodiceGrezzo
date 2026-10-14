@@ -9,5 +9,19 @@ public class LicenciaModelo3D
     [Required]
     public DateTime FechaExpiracion { get; set; }
 
-    public List<Modelo3D> Modelos3D { get; set; } = new List<Modelo3D>();
+    public List<Modelo3D> Modelos3D { get; set; }
+
+
+    public LicenciaModelo3D()
+    {
+        Nombre = string.Empty;
+        Modelos3D = new List<Modelo3D>();
+    }
+
+    public LicenciaModelo3D(string nombre, DateTime fechaExpiracion)
+    {
+        Nombre = nombre;
+        FechaExpiracion = fechaExpiracion;
+        Modelos3D = new List<Modelo3D>();
+    }
 }

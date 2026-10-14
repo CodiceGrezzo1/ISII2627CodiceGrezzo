@@ -4,20 +4,20 @@ public class CompraModelo3D
     public int Id { get; set; }
 
     [Required]
-    public DateTime FechaCompra { get; set; } = DateTime.Now;
+    public DateTime FechaCompra { get; set; }
 
     [Required]
-    public string NombreCliente { get; set; } = string.Empty;
+    public string NombreCliente { get; set; }
 
     [Required]
-    public string ApellidosCliente { get; set; } = string.Empty;
+    public string ApellidosCliente { get; set; }
 
     [Required]
     [EmailAddress]
-    public string CorreoElectronico { get; set; } = string.Empty;
+    public string CorreoElectronico { get; set; }
 
     [Required]
-    public string DireccionFacturacion { get; set; } = string.Empty;
+    public string DireccionFacturacion { get; set; }
 
     public string? Descripcion { get; set; }
 
@@ -28,7 +28,31 @@ public class CompraModelo3D
     [Required]
     public MetodoPago MetodoPago { get; set; }
 
-    public Cliente Cliente { get; set; } = null!;
+    public required Cliente Cliente { get; set; }
 
-    public List<LineaCompraModelo> LineasCompraModelo { get; set; } = new List<LineaCompraModelo>();
+    public List<LineaCompraModelo> LineasCompraModelo { get; set; }
+
+    public CompraModelo3D()
+    {
+        FechaCompra = DateTime.Now;
+        NombreCliente = string.Empty;
+        ApellidosCliente = string.Empty;
+        CorreoElectronico = string.Empty;
+        DireccionFacturacion = string.Empty;
+        LineasCompraModelo = new List<LineaCompraModelo>();
+    }
+
+    
+    public CompraModelo3D(string nombreCliente, string apellidosCliente, string correoElectronico, string direccionFacturacion, decimal precioTotal, MetodoPago metodoPago, Cliente cliente)
+    {
+        FechaCompra = DateTime.Now;
+        NombreCliente = nombreCliente;
+        ApellidosCliente = apellidosCliente;
+        CorreoElectronico = correoElectronico;
+        DireccionFacturacion = direccionFacturacion;
+        PrecioTotal = precioTotal;
+        MetodoPago = metodoPago;
+        Cliente = cliente;
+        LineasCompraModelo = new List<LineaCompraModelo>();
+    }
 }
