@@ -25,12 +25,12 @@ namespace AppForSEII.API.Models
         public MetodoPago MetodoPago { get; set; }
 
         // Relación: Una reserva contiene muchas líneas (Composición)
-        public IList<LineaReserva> Lineas { get; set; } = new List<LineaReserva>();
+        public IList<LineaReserva> Lineas { get; set; } = [];
 
         // Relación: Una reserva es realizada por un cliente
         // (El Id es string porque hereda de IdentityUser)
         public string ClienteId { get; set; } = string.Empty;
-        public Cliente Cliente { get; set; } = null!;
+        public required Cliente Cliente { get; set; }
 
         // 1. Constructor por defecto (obligatorio para Entity Framework Core)
         public ReservaImpresora()
