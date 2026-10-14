@@ -38,7 +38,7 @@ namespace AppForSEII.API.Models
             ApellidosCliente = string.Empty;
             DireccionFacturacion = string.Empty;
             ClienteId = string.Empty;
-            Lineas = new List<LineaReserva>();
+            Lineas = [];
         }
 
         // 2. Constructor parametrizado para facilitar la creación de instancias
@@ -50,7 +50,7 @@ namespace AppForSEII.API.Models
             MetodoPago = metodoPago;
             Cliente = cliente;
             ClienteId = cliente != null ? cliente.Id : string.Empty;
-            Lineas = new List<LineaReserva>();
+            Lineas = [];
         }
     }
 }
