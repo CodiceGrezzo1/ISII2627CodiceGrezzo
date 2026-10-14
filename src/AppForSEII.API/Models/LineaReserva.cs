@@ -16,21 +16,26 @@ namespace AppForSEII.API.Models
         [Precision(8, 2)]
         public decimal PrecioSubtotal { get; set; }
 
-
-
-
-
-
-        
-        
         // Relación: Una línea pertenece a una reserva
         public int ReservaImpresoraId { get; set; }
-        public ReservaImpresora ReservaImpresora { get; set; } = null!; //para que se quite la advertencia de que puede ser null
+        public required ReservaImpresora ReservaImpresora { get; set; }
 
         // Relación: Una línea apunta a una impresora concreta
         public int Impresora3DId { get; set; }
-        public Impresora3D Impresora3D { get; set; } = null!;
-    }
-    
-}
+        public required Impresora3D Impresora3D { get; set; }
 
+        // 1. Constructor por defecto (obligatorio para Entity Framework Core)
+        public LineaReserva()
+        {
+        }
+
+        // 2. Constructor parametrizado para facilitar la creación de instancias
+        public LineaReserva(TiempoReserva tiempoReserva, decimal precioSubtotal, Impresora3D impresora3D, ReservaImpresora reservaImpresora)
+        {
+            TiempoReserva = tiempoReserva;
+            PrecioSubtotal = precioSubtotal;
+            Impresora3D = impresora3D;
+            ReservaImpresora = reservaImpresora;
+        }
+    }
+}
