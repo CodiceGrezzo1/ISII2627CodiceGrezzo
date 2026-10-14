@@ -10,11 +10,11 @@ namespace AppForSEII.API.Models
         public int Id { get; set; }
 
         [StringLength(100)]
-        public string ApellidosCliente { get; set; } = string.Empty;
+        public string? ApellidosCliente { get; set; } // El ? indica que es opcional
 
         [Required]
         [StringLength(200)]
-        public string DireccionFacturacion { get; set; } = string.Empty;
+        public required string DireccionFacturacion { get; set; }
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
@@ -28,28 +28,24 @@ namespace AppForSEII.API.Models
         public IList<LineaReserva> Lineas { get; set; } = [];
 
         // Relación: Una reserva es realizada por un cliente
-        // (El Id es string porque hereda de IdentityUser)
-        public string ClienteId { get; set; } = string.Empty;
+        public required string ClienteId { get; set; }
         public required Cliente Cliente { get; set; }
 
         // 1. Constructor por defecto (obligatorio para Entity Framework Core)
         public ReservaImpresora()
         {
-            ApellidosCliente = string.Empty;
-            DireccionFacturacion = string.Empty;
-            ClienteId = string.Empty;
             Lineas = [];
         }
 
         // 2. Constructor parametrizado para facilitar la creación de instancias
-        public ReservaImpresora(string apellidosCliente, string direccionFacturacion, decimal precioTotal, MetodoPago metodoPago, Cliente cliente)
+        public ReservaImpresora(string? apellidosCliente, string direccionFacturacion, decimal precioTotal, MetodoPago metodoPago, Cliente cliente)
         {
             ApellidosCliente = apellidosCliente;
             DireccionFacturacion = direccionFacturacion;
             PrecioTotal = precioTotal;
             MetodoPago = metodoPago;
             Cliente = cliente;
-            ClienteId = cliente != null ? cliente.Id : string.Empty;
+            ClienteId = cliente?.Id ?? ""; // Obtiene el Id del cliente automáticamente
             Lineas = [];
         }
     }

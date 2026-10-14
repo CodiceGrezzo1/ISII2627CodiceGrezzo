@@ -10,17 +10,17 @@ namespace AppForSEII.API.Models
 
         [Required]
         [StringLength(100)]
-        public string Nombre { get; set; } = string.Empty;
+        public required string Nombre { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Modelo { get; set; } = string.Empty;
+        public required string Modelo { get; set; }
 
         [Required]
         public TipoImpresora Tipo { get; set; }
 
         [StringLength(500)]
-        public string Descripcion { get; set; } = string.Empty;
+        public string? Descripcion { get; set; } // El ? indica que es opcional
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
@@ -35,13 +35,11 @@ namespace AppForSEII.API.Models
         // 1. Constructor por defecto (obligatorio para Entity Framework Core)
         public Impresora3D()
         {
-            Nombre = string.Empty;
-            Modelo = string.Empty;
-            Descripcion = string.Empty;
+            // Ya no hace falta ensuciarlo con string.Empty
         }
 
         // 2. Constructor parametrizado para facilitar la creación de instancias
-        public Impresora3D(string nombre, string modelo, TipoImpresora tipo, string descripcion, decimal precioKilovatioHora, decimal precioReserva)
+        public Impresora3D(string nombre, string modelo, TipoImpresora tipo, string? descripcion, decimal precioKilovatioHora, decimal precioReserva)
         {
             Nombre = nombre;
             Modelo = modelo;
