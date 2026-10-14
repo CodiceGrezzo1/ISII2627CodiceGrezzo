@@ -1,6 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace AppForSEII.API.Models
 {
@@ -9,16 +9,7 @@ namespace AppForSEII.API.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        [System.ComponentModel.DataAnnotations.DataType(System.ComponentModel.DataAnnotations.DataType.DateTime)]
-        public DateTime FechaReserva { get; set; }
-
-        [Required(ErrorMessage = "El nombre del cliente es obligatorio")]
         [StringLength(100)]
-        public string NombreCliente { get; set; } = string.Empty;
-
-        [Required]
-        [StringLength(150)]
         public string ApellidosCliente { get; set; } = string.Empty;
 
         [Required]
@@ -26,25 +17,40 @@ namespace AppForSEII.API.Models
         public string DireccionFacturacion { get; set; } = string.Empty;
 
         [Required]
-        [System.ComponentModel.DataAnnotations.DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(8, 2)]
         public decimal PrecioTotal { get; set; }
 
         [Required]
         public MetodoPago MetodoPago { get; set; }
 
-
-
-
-
-        
-
         // Relación: Una reserva contiene muchas líneas (Composición)
-        public IList<LineaReserva> Lineas { get; set; } = []; //sugerencia de que en esta version de C# no hay que escribir la ruta completa de una lista vacía
+        public IList<LineaReserva> Lineas { get; set; } = new List<LineaReserva>();
 
         // Relación: Una reserva es realizada por un cliente
         // (El Id es string porque hereda de IdentityUser)
         public string ClienteId { get; set; } = string.Empty;
         public Cliente Cliente { get; set; } = null!;
+
+        // 1. Constructor por defecto (obligatorio para Entity Framework Core)
+        public ReservaImpresora()
+        {
+            ApellidosCliente = string.Empty;
+            DireccionFacturacion = string.Empty;
+            ClienteId = string.Empty;
+            Lineas = new List<LineaReserva>();
+        }
+
+        // 2. Constructor parametrizado para facilitar la creación de instancias
+        public ReservaImpresora(string apellidosCliente, string direccionFacturacion, decimal precioTotal, MetodoPago metodoPago, Cliente cliente)
+        {
+            ApellidosCliente = apellidosCliente;
+            DireccionFacturacion = direccionFacturacion;
+            PrecioTotal = precioTotal;
+            MetodoPago = metodoPago;
+            Cliente = cliente;
+            ClienteId = cliente != null ? cliente.Id : string.Empty;
+            Lineas = new List<LineaReserva>();
+        }
     }
 }
