@@ -36,7 +36,6 @@ namespace AppForSEII.API.Models
 
 
 
-
         
 
         // Relación: Una reserva contiene muchas líneas (Composición)
