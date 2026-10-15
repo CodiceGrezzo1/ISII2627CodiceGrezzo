@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppForSEII.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261005210757_CreateIdentitySchema")]
+    [Migration("20261015104155_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         /// <inheritdoc />
@@ -249,7 +249,6 @@ namespace AppForSEII.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -277,6 +276,39 @@ namespace AppForSEII.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Impresoras3D");
+                });
+
+            modelBuilder.Entity("AppForSEII.API.Models.LineaCompraAccesorio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccesorioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompraAccesoriosId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreAccesorio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PrecioUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccesorioId");
+
+                    b.HasIndex("CompraAccesoriosId");
+
+                    b.ToTable("LineaCompraAccesorios");
                 });
 
             modelBuilder.Entity("AppForSEII.API.Models.LineaEncargo", b =>
@@ -508,39 +540,6 @@ namespace AppForSEII.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LicenciasModelo3D");
-                });
-
-            modelBuilder.Entity("LineaCompraAccesorio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccesorioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompraAccesoriosId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NombreAccesorio")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("PrecioUnitario")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccesorioId");
-
-                    b.HasIndex("CompraAccesoriosId");
-
-                    b.ToTable("LineaCompraAccesorios");
                 });
 
             modelBuilder.Entity("LineaCompraModelo", b =>
@@ -787,6 +786,25 @@ namespace AppForSEII.API.Migrations
                     b.Navigation("Cliente");
                 });
 
+            modelBuilder.Entity("AppForSEII.API.Models.LineaCompraAccesorio", b =>
+                {
+                    b.HasOne("AppForSEII.API.Models.Accesorio", "Accesorio")
+                        .WithMany("LineaCompraAccesorios")
+                        .HasForeignKey("AccesorioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppForSEII.API.Models.CompraAccesorios", "CompraAccesorios")
+                        .WithMany("LineasCompraAccesorio")
+                        .HasForeignKey("CompraAccesoriosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Accesorio");
+
+                    b.Navigation("CompraAccesorios");
+                });
+
             modelBuilder.Entity("AppForSEII.API.Models.LineaEncargo", b =>
                 {
                     b.HasOne("AppForSEII.API.Models.EncargoImpresion", "EncargoImpresion")
@@ -817,7 +835,7 @@ namespace AppForSEII.API.Migrations
             modelBuilder.Entity("AppForSEII.API.Models.LineaReserva", b =>
                 {
                     b.HasOne("AppForSEII.API.Models.Impresora3D", "Impresora3D")
-                        .WithMany("Lineas")
+                        .WithMany()
                         .HasForeignKey("Impresora3DId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -853,25 +871,6 @@ namespace AppForSEII.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("LineaCompraAccesorio", b =>
-                {
-                    b.HasOne("AppForSEII.API.Models.Accesorio", "Accesorio")
-                        .WithMany("LineaCompraAccesorios")
-                        .HasForeignKey("AccesorioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AppForSEII.API.Models.CompraAccesorios", "CompraAccesorios")
-                        .WithMany("LineasCompraAccesorio")
-                        .HasForeignKey("CompraAccesoriosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Accesorio");
-
-                    b.Navigation("CompraAccesorios");
                 });
 
             modelBuilder.Entity("LineaCompraModelo", b =>
@@ -983,11 +982,6 @@ namespace AppForSEII.API.Migrations
             modelBuilder.Entity("AppForSEII.API.Models.EncargoImpresion", b =>
                 {
                     b.Navigation("LineasEncargo");
-                });
-
-            modelBuilder.Entity("AppForSEII.API.Models.Impresora3D", b =>
-                {
-                    b.Navigation("Lineas");
                 });
 
             modelBuilder.Entity("AppForSEII.API.Models.Material", b =>
