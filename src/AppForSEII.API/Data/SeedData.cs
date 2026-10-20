@@ -26,6 +26,7 @@ namespace AppForSEII.API.Data {
                 SeedImpresoras3D(dbContext);
             }
             catch (Exception ex) {
+                dbContext.ChangeTracker.Clear();
                 logger.LogError(ex, "An error occurred seeding the 3D Printers in the Database.");
             }
             // --- NUEVO: Seeding de Piezas3D y Materiales ---
@@ -33,7 +34,24 @@ namespace AppForSEII.API.Data {
                 SeedPiezas3D(dbContext);
             }
             catch (Exception ex) {
+                dbContext.ChangeTracker.Clear();
                 logger.LogError(ex, "An error occurred seeding the Piezas3D in the Database.");
+            }
+             // ---> AQUÍ LLAMAMOS A TU MÉTODO PARA LOS MODELOS 3D <---
+            try {
+                SeedModelos3D(dbContext);
+            }
+            catch (Exception ex) {
+                dbContext.ChangeTracker.Clear();
+                logger.LogError(ex, "An error occurred seeding the Modelos3D in the Database.");
+            }
+             // ---> AQUÍ LLAMAMOS A TU MÉTODO PARA LOS ACCESORIOS <---
+            try {
+                SeedAccesorios(dbContext);
+            }
+            catch (Exception ex) {
+                dbContext.ChangeTracker.Clear();
+                logger.LogError(ex, "An error occurred seeding the Accesorios in the Database.");
             }
         }
 
@@ -74,44 +92,26 @@ namespace AppForSEII.API.Data {
                 }
             }
         }
-        
-public static void SeedModelos3D(ApplicationDbContext dbContext) 
+         
+public static void SeedModelos3D(ApplicationDbContext dbContext)
 {
-    
-    if (!dbContext.Modelos3D.Any()) 
+    if (!dbContext.Modelos3D.Any())
     {
-        var modelo1 = new Modelo3D 
+        if (!dbContext.LicenciasModelo3D.Any())
         {
-            Nombre = "Jarrón Decorativo Moderno",
-            Categoria = "Decoración",
-            Formato = FormatoModelo3D.STL,
-            Precio = 12.50m
-        };
+            dbContext.LicenciasModelo3D.AddRange(
+                new LicenciaModelo3D { Nombre = "Licencia Personal", FechaExpiracion = DateTime.Now.AddYears(1) },
+                new LicenciaModelo3D { Nombre = "Licencia Comercial", FechaExpiracion = DateTime.Now.AddYears(2) }
+            );
+            dbContext.SaveChanges();
+        }
 
-        var modelo2 = new Modelo3D 
-        {
-            Nombre = "Soporte para Auriculares Magsafe",
-            Categoria = "Accesorios",
-            Formato = FormatoModelo3D.OBJ,
-            Precio = 24.99m
-        };
+        var licencias = dbContext.LicenciasModelo3D.ToList();
 
-        var modelo3 = new Modelo3D 
-        {
-            Nombre = "Figura Dragón Articulado",
-            Categoria = "Juegos y Figuras",
-            Formato = FormatoModelo3D.TresMF,
-            Precio = 8.50m
-        };
-
-        var modelo4 = new Modelo3D 
-        {
-            Nombre = "Engranaje de Recambio M3",
-            Categoria = "Repuestos",
-            Formato = FormatoModelo3D.STL,
-            Precio = 4.75m
-        };
-
+       var modelo1 = new Modelo3D { Nombre = "Jarrón Decorativo Moderno", Categoria = "Decoración", Formato = FormatoModelo3D.STL, Precio = 12.50m, LicenciaModelo3D = licencias[0] };
+var modelo2 = new Modelo3D { Nombre = "Soporte para Auriculares Magsafe", Categoria = "Accesorios", Formato = FormatoModelo3D.OBJ, Precio = 24.99m, LicenciaModelo3D = licencias[0] };
+var modelo3 = new Modelo3D { Nombre = "Figura Dragón Articulado", Categoria = "Juegos y Figuras", Formato = FormatoModelo3D.TresMF, Precio = 8.50m, LicenciaModelo3D = licencias[1] };
+var modelo4 = new Modelo3D { Nombre = "Engranaje de Recambio M3", Categoria = "Repuestos", Formato = FormatoModelo3D.STL, Precio = 4.75m, LicenciaModelo3D = licencias[1] };
         dbContext.Modelos3D.AddRange(modelo1, modelo2, modelo3, modelo4);
         dbContext.SaveChanges();
     }
