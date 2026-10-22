@@ -34,11 +34,14 @@ public class Piezas3DController : ControllerBase
     [HttpGet]
     [Route("[action]")]
     [ProducesResponseType(typeof(IList<Pieza3DForListDTO>), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult> GetPiezas3D(string? name)
+    public async Task<ActionResult> GetPiezas3D(string? name, CategoriaPieza? categoria)
     {
         // 1. Consultamos la base de datos aplicando el filtro Where y la proyección Select[cite: 29, 30]
         var piezas = await _context.Piezas3D
-            .Where(p => (name == null) || p.Nombre.Contains(name)) // Comprobamos primero si name es null para evitar errores[cite: 30]
+           .Where(p => (name == null || p.Nombre.Contains(name)) &&
+                    (categoria == null || p.Categoria == categoria))
+             .OrderBy(p => p.Categoria)     // Orden principal por categoría
+            .ThenBy(p => p.Nombre)          // Orden secundario por nombre       
             .Select(p => new Pieza3DForListDTO(p.Id, p.Nombre, p.Peso, p.Categoria.ToString())) // Proyectamos al DTO[cite: 29]
             .ToListAsync();
 
