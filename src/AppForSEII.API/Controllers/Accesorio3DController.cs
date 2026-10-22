@@ -51,6 +51,6 @@ public class Accesorio3DController : ControllerBase
                 a.Id, a.Nombre, a.Categoria, a.Compatibilidad, a.CantidadDisponible, a.Precio))
             .ToListAsync();
 
-        return Ok(accesorios);
+        return Ok(accesorios); 
     }
 }

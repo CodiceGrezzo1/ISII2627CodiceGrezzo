@@ -44,4 +44,4 @@ public class Accesorio3DForGetDTO
     {
         return HashCode.Combine(Id, Nombre, Categoria, Compatibilidad, CantidadDisponible, Precio);
     }
-}
+}  
