@@ -43,7 +43,6 @@ public class Accesorio3DController : ControllerBase
         }
 
         var accesorios = await _context.Accesorios
-            .Where(a => a.CantidadDisponible > 0)                                    // solo con stock
             .Where(a => (nombre == null) || a.Nombre.Contains(nombre))               // filtro por nombre
             .Where(a => (categoriaFiltro == null) || a.Categoria == categoriaFiltro) // filtro por categoría
             .OrderBy(a => a.Nombre)
