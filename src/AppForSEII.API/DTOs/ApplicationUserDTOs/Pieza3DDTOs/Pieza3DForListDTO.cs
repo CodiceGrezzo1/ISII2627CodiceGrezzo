@@ -1,3 +1,5 @@
+
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AppForSEII.API.DTOs.Pieza3DDTOs;
@@ -15,19 +17,31 @@ public class Pieza3DForListDTO
     [StringLength(50, ErrorMessage = "El nombre de la categoría no puede superar los 50 caracteres")]
     public string Categoria { get; set; }
 
-    // Constructor vacío
     public Pieza3DForListDTO()
     {
         Nombre = string.Empty;
         Categoria = string.Empty;
     }
 
-    // Constructor con parámetros para el .Select() del controlador
     public Pieza3DForListDTO(int id, string nombre, decimal peso, string categoria)
     {
         Id = id;
         Nombre = nombre;
         Peso = peso;
         Categoria = categoria;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Pieza3DForListDTO dto &&
+               Id == dto.Id &&
+               Nombre == dto.Nombre &&
+               Peso == dto.Peso &&
+               Categoria == dto.Categoria;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, Nombre, Peso, Categoria);
     }
 }
