@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      API: ./src/AppForMovies.API/AppForMovies.API.csproj
-      WEB: ./src/AppForMovies.Web/AppForMovies.Web.csproj
-      UT:  ./test/AppForMovies.UT/AppForMovies.UT.csproj
-      UIT: ./test/AppForMovies.UIT/AppForMovies.UIT.csproj
+      API: ./src/AppForSEII.API/AppForSEII.API.csproj
+      WEB: ./src/AppForSEII.Web/AppForSEII.Web.csproj
+      UT:  ./test/AppForSEII.UT/AppForSEII.UT.csproj
+      UIT: ./test/AppForSEII.UIT/AppForSEII.UIT.csproj
       
     steps:
       - name: Check out repository code 
@@ -49,4 +49,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TestResults
-          path: ./test/AppForSEII2526.UT/TestResults/TestResults.trx
+          path: ./test/AppForSEII2627.UT/TestResults/TestResults.trx
