@@ -1,4 +1,5 @@
-using Microsoft.Data.Sqlite;
+ using AppForSEII.API.Logging;
+    using Microsoft.Data.Sqlite;
 using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +66,11 @@ builder.Services.AddSwaggerGen(options => {
     });
 
 });
+
+//configuramos el builder para añadir el nuevo proveedor personalizado(distribuidos)
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ")); 
+
+
 
 
 var app = builder.Build();

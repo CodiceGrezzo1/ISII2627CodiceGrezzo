@@ -20,6 +20,8 @@ namespace AppForSEII.API.Controllers
         {
             _context = context;
             _logger=logger;
+            _logger.LogInformation("TodoService initialized"); 
+
         }
 
         // GET: ApplicationUsers
@@ -42,6 +44,7 @@ namespace AppForSEII.API.Controllers
         {
             if (id == null)
             {
+                _logger.LogError( "Error deleting ToDo item"); // Trace, Debug, Information, Warning, Error, o Critical.
                 return NotFound();
             }
 
