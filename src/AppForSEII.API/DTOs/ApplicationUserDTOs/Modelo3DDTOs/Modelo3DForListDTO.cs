@@ -4,6 +4,13 @@ namespace AppForSEII.API.DTOs.Modelo3DDTOs;
 
 public class Modelo3DForListDTO
 {
+    public Modelo3DForListDTO()
+    {
+        Nombre = string.Empty;
+        Categoria = string.Empty;
+        Formato = string.Empty;
+    }
+
     public Modelo3DForListDTO(int id, string nombre, string categoria, string formato, decimal precio)
     {
         Id = id;
