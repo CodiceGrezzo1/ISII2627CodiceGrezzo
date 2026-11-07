@@ -1,6 +1,6 @@
 namespace AppForSEII.API.DTOs.ReservaDTOs
 {
-    // Datos que recibe CreateReserva (pasos 5 y 6 del caso de uso)
+    // Datos que recibe CreateReserva 
     public class ReservaForCreateDTO
     {
         public ReservaForCreateDTO()

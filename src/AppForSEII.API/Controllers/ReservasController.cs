@@ -166,10 +166,7 @@ public class ReservasController : ControllerBase
         return CreatedAtAction("GetReserva", new { id = reserva.Id }, reservaDetail);
     }
 
-    // SUPUESTO (el enunciado no detalla la fórmula): PrecioReserva es el precio de reservar la impresora
-    // una hora, así que el subtotal es PrecioReserva x número de horas. El precio del kWh solo se muestra,
-    // porque el modelo no guarda el consumo de cada impresora.
-    // Si el equipo decide otra fórmula, solo hay que cambiar este método.
+    
     private static decimal CalcularSubtotal(Impresora3D impresora, TiempoReserva tiempo)
     {
         return impresora.PrecioReserva * HorasDeReserva(tiempo);
