@@ -33,6 +33,8 @@ public class GetImpresorasParaReservar_test : AppForSEII4SqliteUT
     }
 
     [Fact]
+    [Trait("LevelTesting", "Unit Testing")]
+    [Trait("Database", "WithoutFixture")]
     public async Task GetImpresorasParaReservar_SinFiltros_test()
     {
         // Arrange
@@ -51,6 +53,8 @@ public class GetImpresorasParaReservar_test : AppForSEII4SqliteUT
     }
 
     [Fact]
+    [Trait("LevelTesting", "Unit Testing")]
+    [Trait("Database", "WithoutFixture")]
     public async Task GetImpresorasParaReservar_FiltroNombre_test()
     {
         // Arrange
@@ -68,6 +72,8 @@ public class GetImpresorasParaReservar_test : AppForSEII4SqliteUT
     }
 
     [Fact]
+    [Trait("LevelTesting", "Unit Testing")]
+    [Trait("Database", "WithoutFixture")]
     public async Task GetImpresorasParaReservar_FiltroTipo_test()
     {
         // Arrange
@@ -85,6 +91,8 @@ public class GetImpresorasParaReservar_test : AppForSEII4SqliteUT
     }
 
     [Fact]
+    [Trait("LevelTesting", "Unit Testing")]
+    [Trait("Database", "WithoutFixture")]
     public async Task GetImpresorasParaReservar_FiltroNombreYTipo_test()
     {
         // Arrange
@@ -102,6 +110,8 @@ public class GetImpresorasParaReservar_test : AppForSEII4SqliteUT
     }
 
     [Fact]
+    [Trait("LevelTesting", "Unit Testing")]
+    [Trait("Database", "WithoutFixture")]
     public async Task GetImpresorasParaReservar_SinResultados_test()
     {
         // Arrange
@@ -118,6 +128,8 @@ public class GetImpresorasParaReservar_test : AppForSEII4SqliteUT
     }
 
     [Fact]
+    [Trait("LevelTesting", "Unit Testing")]
+    [Trait("Database", "WithoutFixture")]
     public async Task GetImpresorasParaReservar_TipoSinImpresoras_test()
     {
         // Arrange
@@ -134,6 +146,8 @@ public class GetImpresorasParaReservar_test : AppForSEII4SqliteUT
     }
 
     [Fact]
+    [Trait("LevelTesting", "Unit Testing")]
+    [Trait("Database", "WithoutFixture")]
     public async Task GetImpresorasParaReservar_FiltroTipoFilamento_test()
     {
         // Arrange
