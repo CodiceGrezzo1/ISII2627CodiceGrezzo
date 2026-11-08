@@ -12,6 +12,8 @@ public class LineaCompraModelo
     [Required]
     public decimal Subtotal { get; set; }
 
+    public int Modelo3DId { get; set; }
+
     public CompraModelo3D CompraModelo3D { get; set; }
     public Modelo3D Modelo3D { get; set; }
 
