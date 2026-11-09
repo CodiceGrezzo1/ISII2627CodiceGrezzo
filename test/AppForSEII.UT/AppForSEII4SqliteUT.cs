@@ -21,16 +21,17 @@ namespace AppForSEII.UT {
             _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseSqlite(_connection).Options;
 
-            // Create the schema and seed some data
+            // Create the schema and seed some data 
             _context = new ApplicationDbContext(_contextOptions);
-            if (_context.Database.EnsureCreated()) {
-                using var viewCommand = _context.Database.GetDbConnection().CreateCommand();
-                viewCommand.CommandText = @"
-                CREATE VIEW AllResources AS
-                SELECT Name
-                FROM Movies;";
-                viewCommand.ExecuteNonQuery();
-            }
+    //        if (_context.Database.EnsureCreated()) {
+    //            using var viewCommand = _context.Database.GetDbConnection().CreateCommand();
+    //            viewCommand.CommandText = @"
+    //            CREATE VIEW AllResources AS
+    //            SELECT Name
+    //            FROM Movies;";
+    //            viewCommand.ExecuteNonQuery();
+     //       } 
+            _context.Database.EnsureCreated();
         }
     }
 }
