@@ -1,4 +1,4 @@
-// Importamos las librerías necesarias de ASP.NET Core y Entity Framework
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net; // Necesario para HttpStatusCode.OK
@@ -21,11 +21,11 @@ public class Piezas3DController : ControllerBase
     // Variable para registrar (loguear) errores o información útil en la consola[cite: 15, 17]
     private readonly ILogger<Piezas3DController> _logger;
 
-    // Constructor del controlador: recibe automáticamente las dependencias (Inyección de Dependencias)[cite: 17]
+    // Constructor del controlador: recibe automáticamente las dependencias (Inyección de Dependencias)
     public Piezas3DController(ApplicationDbContext context, ILogger<Piezas3DController> logger)
     {
-        _context = context; // Guardamos la conexión a la base de datos[cite: 17]
-        _logger = logger;   // Guardamos el sistema de logs[cite: 17]
+        _context = context; // Guardar la conexión a la base de datos
+        _logger = logger;   // Guardar el sistema de logs
     }
 
     // ==========================================================================
@@ -36,17 +36,17 @@ public class Piezas3DController : ControllerBase
     [ProducesResponseType(typeof(IList<Pieza3DForListDTO>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult> GetPiezas3D(string? name, CategoriaPieza? categoria)
     {
-        // 1. Consultamos la base de datos aplicando el filtro Where y la proyección Select[cite: 29, 30]
+        // 1. Consultar la base de datos aplicando el filtro Where y la proyección Select
         var piezas = await _context.Piezas3D
            .Where(p => (name == null || p.Nombre.Contains(name)) &&
                     (categoria == null || p.Categoria == categoria))
              .OrderBy(p => p.Categoria)     // Orden principal por categoría
             .ThenBy(p => p.Nombre)          // Orden secundario por nombre       
-            .Select(p => new Pieza3DForListDTO(p.Id, p.Nombre, p.Peso, p.Categoria.ToString())) // Proyectamos al DTO[cite: 29]
+            .Select(p => new Pieza3DForListDTO(p.Id, p.Nombre, p.Peso, p.Categoria.ToString())) 
             .ToListAsync();
 
-        // 2. Devolvemos la lista resultante con un código HTTP 200 (OK)[cite: 25, 30]
+        // 2. Devolver la lista resultante con un código HTTP 200 (OK)
         return Ok(piezas);
     }
 
-} // <--- Esta es la única llave final que cierra la clase Piezas3DController
+} 
