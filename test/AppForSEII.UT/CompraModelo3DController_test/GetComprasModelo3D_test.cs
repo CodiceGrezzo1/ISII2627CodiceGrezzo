@@ -10,63 +10,17 @@ public class GetComprasModelo3D_test : AppForSEII4SqliteUT
 
     public GetComprasModelo3D_test()
     {
-        var licencia = new LicenciaModelo3D
-        {
-            Id = 1,
-            Nombre = "Licencia de prueba",
-            FechaExpiracion = new DateTime(2027, 11, 1)
-        };
+        var cliente = new Cliente("1", "Daniel", "Gómez", "daniel@test.com", "Calle Falsa 123");
+        var licencia = new LicenciaModelo3D("Licencia de prueba", new DateTime(2027, 11, 1));
+        var modelo = new Modelo3D("Dragon Articulado", "Miniaturas", FormatoModelo3D.STL, 15.0m, licencia);
 
-        var modelo = new Modelo3D
-        {
-            Id = 1,
-            Nombre = "Dragon Articulado",
-            Categoria = "Minijaturas",
-            Formato = FormatoModelo3D.STL,
-            Precio = 15.0m,
-            LicenciaModelo3D = licencia
-        };
+        var compra1 = new CompraModelo3D("Daniel", "Gómez", "daniel@test.com", "Calle Falsa 123", 15.0m,
+            MetodoPago.tarjetaCredito, cliente) { Cliente = cliente, FechaCompra = _fecha };
+        compra1.LineasCompraModelo.Add(new LineaCompraModelo(1, 15.0m, 15.0m, compra1, modelo));
 
-        var cliente = new Cliente
-        {
-            Id = "cliente-1",
-            UserName = "daniel@test.com",
-            Email = "daniel@test.com"
-        };
-
-        var compra1 = new CompraModelo3D
-        {
-            Id = 1,
-            FechaCompra = _fecha,
-            NombreCliente = "Daniel",
-            ApellidosCliente = "Gómez",
-            CorreoElectronico = "daniel@test.com",
-            DireccionFacturacion = "Calle Falsa 123",
-            MetodoPago = MetodoPago.tarjetaCredito,
-            PrecioTotal = 15.0m,
-            Cliente = cliente,
-            LineasCompraModelo = new List<LineaCompraModelo>
-            {
-                new LineaCompraModelo { Id = 1, CantidadLicencias = 1, PrecioUnidad = 15.0m, Subtotal = 15.0m, Modelo3D = modelo, Modelo3DId = 1 }
-            }
-        };
-
-        var compra2 = new CompraModelo3D
-        {
-            Id = 2,
-            FechaCompra = _fecha,
-            NombreCliente = "Lucía",
-            ApellidosCliente = "Alonso",
-            CorreoElectronico = "lucia@test.com",
-            DireccionFacturacion = "Calle Mayor 5",
-            MetodoPago = MetodoPago.paypal,
-            PrecioTotal = 30.0m,
-            Cliente = cliente,
-            LineasCompraModelo = new List<LineaCompraModelo>
-            {
-                new LineaCompraModelo { Id = 2, CantidadLicencias = 2, PrecioUnidad = 15.0m, Subtotal = 30.0m, Modelo3D = modelo, Modelo3DId = 1 }
-            }
-        };
+        var compra2 = new CompraModelo3D("Lucía", "Alonso", "lucia@test.com", "Calle Mayor 5", 30.0m,
+            MetodoPago.paypal, cliente) { Cliente = cliente, FechaCompra = _fecha };
+        compra2.LineasCompraModelo.Add(new LineaCompraModelo(2, 15.0m, 30.0m, compra2, modelo));
 
         _context.Add(cliente);
         _context.Add(licencia);
@@ -86,11 +40,11 @@ public class GetComprasModelo3D_test : AppForSEII4SqliteUT
         return new List<object?[]>
         {
             // nombre, apellidos, compras esperadas (ordenadas por apellidos y nombre)
-            new object?[] { null, null, new List<CompraModelo3DForGetDto>() { lucia, daniel } },       // caso 1
-            new object?[] { "Dan", null, new List<CompraModelo3DForGetDto>() { daniel } },             // caso 2
-            new object?[] { null, "Alo", new List<CompraModelo3DForGetDto>() { lucia } },              // caso 3
-            new object?[] { "Dan", "Gómez", new List<CompraModelo3DForGetDto>() { daniel } },          // caso 4
-            new object?[] { "xyz", null, new List<CompraModelo3DForGetDto>() },                        // caso 5: sin resultados
+            new object?[] { null, null, new List<CompraModelo3DForGetDto>() { lucia, daniel } },    // caso 1
+            new object?[] { "Dan", null, new List<CompraModelo3DForGetDto>() { daniel } },          // caso 2
+            new object?[] { null, "Alo", new List<CompraModelo3DForGetDto>() { lucia } },           // caso 3
+            new object?[] { "Dan", "Gómez", new List<CompraModelo3DForGetDto>() { daniel } },       // caso 4
+            new object?[] { "xyz", null, new List<CompraModelo3DForGetDto>() },                     // caso 5: sin resultados
         };
     }
 

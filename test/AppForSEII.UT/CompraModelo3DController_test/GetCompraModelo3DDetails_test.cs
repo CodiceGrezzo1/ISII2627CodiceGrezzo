@@ -1,53 +1,23 @@
 using AppForSEII.API.Controllers;
 using AppForSEII.API.DTOs.CompraModelo3DDTOs;
+using AppForSEII.API.DTOs.Modelo3DDTOs;
 using AppForSEII.API.Models;
 
 namespace AppForSEII.UT.CompraModelo3DController_test;
 
 public class GetCompraModelo3DDetails_test : AppForSEII4SqliteUT
 {
+    private static readonly DateTime _fecha = new DateTime(2026, 11, 1, 10, 0, 0);
+
     public GetCompraModelo3DDetails_test()
     {
-        var licencia = new LicenciaModelo3D
-        {
-            Id = 1,
-            Nombre = "Licencia de prueba",
-            FechaExpiracion = new DateTime(2027, 11, 1)
-        };
+        var cliente = new Cliente("1", "Daniel", "Gómez", "daniel@test.com", "Calle Falsa 123");
+        var licencia = new LicenciaModelo3D("Licencia de prueba", new DateTime(2027, 11, 1));
+        var modelo = new Modelo3D("Dragon Articulado", "Miniaturas", FormatoModelo3D.STL, 15.0m, licencia);
 
-        var modelo = new Modelo3D
-        {
-            Id = 1,
-            Nombre = "Dragon Articulado",
-            Categoria = "Minijaturas",
-            Formato = FormatoModelo3D.STL,
-            Precio = 15.0m,
-            LicenciaModelo3D = licencia
-        };
-
-        var cliente = new Cliente
-        {
-            Id = "cliente-1",
-            UserName = "daniel@test.com",
-            Email = "daniel@test.com"
-        };
-
-        var compra = new CompraModelo3D
-        {
-            Id = 1,
-            FechaCompra = new DateTime(2026, 11, 1, 10, 0, 0),
-            NombreCliente = "Daniel",
-            ApellidosCliente = "Gómez",
-            CorreoElectronico = "daniel@test.com",
-            DireccionFacturacion = "Calle Falsa 123",
-            MetodoPago = MetodoPago.tarjetaCredito,
-            PrecioTotal = 15.0m,
-            Cliente = cliente,
-            LineasCompraModelo = new List<LineaCompraModelo>
-            {
-                new LineaCompraModelo { Id = 1, CantidadLicencias = 1, PrecioUnidad = 15.0m, Subtotal = 15.0m, Modelo3D = modelo, Modelo3DId = 1 }
-            }
-        };
+        var compra = new CompraModelo3D("Daniel", "Gómez", "daniel@test.com", "Calle Falsa 123", 15.0m,
+            MetodoPago.tarjetaCredito, cliente) { Cliente = cliente, FechaCompra = _fecha };
+        compra.LineasCompraModelo.Add(new LineaCompraModelo(1, 15.0m, 15.0m, compra, modelo));
 
         _context.Add(cliente);
         _context.Add(licencia);
@@ -81,17 +51,20 @@ public class GetCompraModelo3DDetails_test : AppForSEII4SqliteUT
         ILogger<CompraModelo3DController> logger = mock.Object;
         var controller = new CompraModelo3DController(_context, logger);
 
+        var expected = new CompraModelo3DForGetDto(1, _fecha, "Daniel", "Gómez", "daniel@test.com",
+            "Calle Falsa 123", null, 15.0m, "tarjetaCredito");
+        expected.LineasCompraModelo = new List<LineaCompraModeloForGetDto>()
+        {
+            new LineaCompraModeloForGetDto(1, 1, 15.0m, 15.0m,
+                new Modelo3DForListDTO(1, "Dragon Articulado", "Miniaturas", "STL", 15.0m))
+        };
+
         // Act
         var result = await controller.GetCompraModelo3DDetails(1);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         var actual = Assert.IsType<CompraModelo3DForGetDto>(okResult.Value);
-        Assert.Equal(1, actual.Id);
-        Assert.Equal("Daniel", actual.NombreCliente);
-        Assert.Equal("Gómez", actual.ApellidosCliente);
-        Assert.Equal("tarjetaCredito", actual.MetodoPago);
-        Assert.Equal(15.0m, actual.PrecioTotal);
-        Assert.Single(actual.LineasCompraModelo); // el Include/ThenInclude carga la línea
+        Assert.Equal(expected, actual);
     }
 }
