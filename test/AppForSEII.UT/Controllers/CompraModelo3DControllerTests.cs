@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
@@ -8,6 +10,7 @@ using AppForSEII.API.Controllers;
 using AppForSEII.API.Data;
 using AppForSEII.API.Models;
 using AppForSEII.API.DTOs.CompraModelo3DDTOs;
+using AppForSEII.API.DTOs.Modelo3DDTOs;
 
 namespace AppForSEII.UT.Controllers;
 
@@ -49,7 +52,7 @@ public class CompraModelo3DControllerTests
             UserName = "daniel@test.com",
             Email = "daniel@test.com"
         };
-        
+
         var compra = new CompraModelo3D
         {
             Id = 1,
@@ -74,6 +77,24 @@ public class CompraModelo3DControllerTests
         context.SaveChanges();
 
         return context;
+    }
+
+    // Simula un usuario autenticado: el controlador usa User.Identity.Name == Cliente.UserName
+    private static void SetUser(CompraModelo3DController controller, string userName)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, userName)
+        };
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(identity)
+            }
+        };
     }
 
     // ==========================================
@@ -135,21 +156,13 @@ public class CompraModelo3DControllerTests
     // POST (Creación)
     // ==========================================
     [Fact]
-    public async Task PostCompraModelo3D_ReturnsCreatedAtAction_WhenDataIsValid()
+    public async Task CreateCompraModelo3D_ReturnsCreatedAtAction_WhenDataIsValid()
     {
         // Arrange
         using var context = GetSqliteDbContext();
         var mockLogger = new Mock<ILogger<CompraModelo3DController>>();
         var controller = new CompraModelo3DController(context, mockLogger.Object);
-        controller.ControllerContext = new Microsoft.AspNetCore.Mvc.ControllerContext
-        {
-            HttpContext = new Microsoft.AspNetCore.Http.DefaultHttpContext
-            {
-                User = new System.Security.Claims.ClaimsPrincipal(new System.Security.Claims.ClaimsIdentity(
-                    new[] { new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "daniel@test.com") },
-                    "Test"))
-            }
-        };
+        SetUser(controller, "daniel@test.com"); // coincide con el UserName del Cliente sembrado
 
         var dto = new CompraModelo3DForCreateDTO
         {
@@ -160,7 +173,7 @@ public class CompraModelo3DControllerTests
             MetodoPago = MetodoPago.tarjetaCredito,
             LineasCompraModelo = new List<LineaCompraModeloForCreateDTO>
             {
-                new LineaCompraModeloForCreateDTO(2, 1)
+                new LineaCompraModeloForCreateDTO(2, 1) // cantidadLicencias: 2, modelo3DId: 1
             }
         };
 
@@ -171,5 +184,6 @@ public class CompraModelo3DControllerTests
         var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
         var returnValue = Assert.IsType<CompraModelo3DForGetDto>(createdAtActionResult.Value);
         Assert.Equal("Daniel", returnValue.NombreCliente);
+        Assert.Equal(30.0m, returnValue.PrecioTotal); // 2 licencias x 15.0
     }
 }
