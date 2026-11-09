@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using AppForSEII.API.Controllers;
 using AppForSEII.API.Data;
 using AppForSEII.API.DTOs.CompraModelo3DDTOs;
+using AppForSEII.API.DTOs.Modelo3DDTOs;
 using AppForSEII.API.Models;
 
 namespace AppForSEII.UT.CompraModelo3DController_test;
@@ -16,31 +17,15 @@ public class CreateCompraModelo3D_test : AppForSEII4SqliteUT
 
     public CreateCompraModelo3D_test()
     {
-        // Cada modelo con su propia licencia
-        var licencia1 = new LicenciaModelo3D
-        {
-            Id = 1,
-            Nombre = "Licencia 1",
-            FechaExpiracion = new DateTime(2027, 11, 1)
-        };
-        var licencia2 = new LicenciaModelo3D
-        {
-            Id = 2,
-            Nombre = "Licencia 2",
-            FechaExpiracion = new DateTime(2027, 11, 1)
-        };
+        var cliente = new Cliente("1", _nombre, _apellidos, _userName, _direccion);
+
+        var licencia1 = new LicenciaModelo3D("Licencia 1", new DateTime(2027, 11, 1));
+        var licencia2 = new LicenciaModelo3D("Licencia 2", new DateTime(2027, 11, 1));
 
         var modelos = new List<Modelo3D>()
         {
-            new Modelo3D { Id = 1, Nombre = "Dragon Articulado", Categoria = "Minijaturas", Formato = FormatoModelo3D.STL, Precio = 15.0m, LicenciaModelo3D = licencia1 },
-            new Modelo3D { Id = 2, Nombre = "Castillo", Categoria = "Escenografia", Formato = FormatoModelo3D.STL, Precio = 20.0m, LicenciaModelo3D = licencia2 },
-        };
-
-        var cliente = new Cliente
-        {
-            Id = "cliente-1",
-            UserName = _userName,
-            Email = _userName
+            new Modelo3D("Dragon Articulado", "Miniaturas", FormatoModelo3D.STL, 15.0m, licencia1),
+            new Modelo3D("Castillo", "Escenografia", FormatoModelo3D.STL, 20.0m, licencia2),
         };
 
         _context.Add(cliente);
@@ -127,6 +112,16 @@ public class CreateCompraModelo3D_test : AppForSEII4SqliteUT
                 new LineaCompraModeloForCreateDTO(1, 2), // 1 x 20.0 = 20.0
             });
 
+        var expected = new CompraModelo3DForGetDto(1, DateTime.Now, _nombre, _apellidos, _userName,
+            _direccion, null, 50.0m, "paypal");
+        expected.LineasCompraModelo = new List<LineaCompraModeloForGetDto>()
+        {
+            new LineaCompraModeloForGetDto(1, 2, 15.0m, 30.0m,
+                new Modelo3DForListDTO(1, "Dragon Articulado", "Miniaturas", "STL", 15.0m)),
+            new LineaCompraModeloForGetDto(2, 1, 20.0m, 20.0m,
+                new Modelo3DForListDTO(2, "Castillo", "Escenografia", "STL", 20.0m)),
+        };
+
         // Act
         var result = await controller.CreateCompraModelo3D(compraDTO);
 
@@ -135,12 +130,8 @@ public class CreateCompraModelo3D_test : AppForSEII4SqliteUT
         Assert.Equal(nameof(CompraModelo3DController.GetCompraModelo3DDetails), createdResult.ActionName);
 
         var actual = Assert.IsType<CompraModelo3DForGetDto>(createdResult.Value);
-        Assert.Equal(1, actual.Id);
-        Assert.Equal(_nombre, actual.NombreCliente);
-        Assert.Equal(_apellidos, actual.ApellidosCliente);
-        Assert.Equal("paypal", actual.MetodoPago);
-        Assert.Equal(50.0m, actual.PrecioTotal);
-        Assert.Equal(2, actual.LineasCompraModelo.Count);
+        expected.FechaCompra = actual.FechaCompra; // el controlador pone DateTime.Now y no se puede predecir
+        Assert.Equal(expected, actual);
 
         // además, la compra se ha guardado en la base de datos con sus dos líneas
         using var contexto = CreateContext();
