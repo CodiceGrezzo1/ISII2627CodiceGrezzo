@@ -116,7 +116,10 @@ public class CompraModelo3DController : ControllerBase
         {
             return BadRequest(new ValidationProblemDetails(ModelState));
         }
-
+        if (createDTO.NombreCliente == "Cliente")
+        {
+            ModelState.AddModelError("NombreCliente","Error!Cliente no es un nombre valido");
+        }
         // 1. Declaramos la compra previamente para asociarla en las líneas (evita errores de validación previa)
         var compra = new CompraModelo3D
         {
