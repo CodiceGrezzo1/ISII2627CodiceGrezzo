@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      API: ./src/MODELO3D.API/MODELO3D.API.csproj
-      WEB: ./src/MODELO3D.Web/MODELO3D.Web.csproj
-      UT:  ./test/MODELO3D.UT/MODELO3D.UT.csproj
-      UIT: ./test/MODELO3D.UIT/MODELO3D.UIT.csproj
+      API: ./src/AppForSEII.API/AppForSEII.API.csproj
+      WEB: ./src/AppForSEII.Web/AppForSEII.Web.csproj
+      UT:  ./test/AppForSEII.UT/AppForSEII.UT.csproj
+      UIT: ./test/AppForSEII.UIT/AppForSEII.UIT.csproj
 
     steps:
       - name: Check out repository code
@@ -50,5 +50,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TestResults
-          path: ./test/MODELO3D.UT/TestResults/TestResults.trx
+          path: ./test/AppForSEII.UT/TestResults/TestResults.trx
           if-no-files-found: error
