@@ -7,6 +7,12 @@ on:
   push:
     branches:
       - '148-adrianmartinez-continuosdelivery'
+
+  pull_request:
+    branches:  
+      - development
+    types:
+      - closed 
   workflow_dispatch:
 
 jobs: 
@@ -42,6 +48,9 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
+
+    if: github.event.pull_request.merged == true
+
     runs-on: windows-latest
     needs: build
     permissions:
@@ -54,18 +63,19 @@ jobs:
         with:
           name: .net-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C101FBE522D849B09A234C82ACD30FF5 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_12510E6E76EE46829F599826581B284E }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A1AEEE565B6A46C38E49C79E5B0FB71C }}
+#      - name: Login to Azure
+#        uses: azure/login@v2
+#        with:
+#          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C101FBE522D849B09A234C82ACD30FF5 }}
+#          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_12510E6E76EE46829F599826581B284E }}
+#          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A1AEEE565B6A46C38E49C79E5B0FB71C }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'app-impresora3d'
-          slot-name: 'Production'
+#          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_ADRIANMARTINEZGALLEGO }}
           package: .
           
