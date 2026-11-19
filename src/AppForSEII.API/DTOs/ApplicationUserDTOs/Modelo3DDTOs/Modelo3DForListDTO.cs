@@ -34,7 +34,8 @@ public class Modelo3DForListDTO
     [Required(ErrorMessage = "El formato es obligatorio.")]
     public string Formato { get; set; }
 
-    [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor a 0.")]
+    // MODIFICADO: Se cambia double.MaxValue por un límite válido para evitar el error de NSwag
+    [Range(0.01, 999999.0, ErrorMessage = "El precio debe ser mayor a 0.")]
     public decimal Precio { get; set; }
 
     public override bool Equals(object? obj)
