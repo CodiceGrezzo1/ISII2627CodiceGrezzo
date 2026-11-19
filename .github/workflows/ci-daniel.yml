@@ -1,8 +1,8 @@
-name: IntegraciónContinua para .NET TuNombre
+name: IntegraciónContinua para .NET Daniel
 
 on:
   push:
-    branches: [ "development", "CI-TuNombre" ]
+    branches: [ "development", "141-crear-el-ci" ]
   pull_request:
     branches: [ "development" ]
 
