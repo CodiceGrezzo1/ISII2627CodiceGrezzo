@@ -5,13 +5,16 @@ name: .NET
 
 on:
   push:
-    branches: [ "development" ]
+    branches: [ "AdrianMartinez-ContinuosDelivery" ]
   pull_request:
     branches: [ "development" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read  
 
     env:
       API: ./src/AppForSEII.API/AppForSEII.API.csproj
@@ -34,6 +37,12 @@ jobs:
           dotnet restore ${{ env.WEB }}  
           dotnet restore ${{ env.UT }}  
           dotnet restore ${{ env.UIT }}  
+         
+      - name: Build with dotnet
+        run: dotnet build ${{ env.API }} --configuration Release --no-restore
+        
+      - name: dotnet publish
+        run: dotnet publish ${{ env.API }} -c Release -o "${{ env.DOTNET_ROOT }}/myapp"  
           
       - name: Build the solution
         run: |
