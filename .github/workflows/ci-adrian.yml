@@ -13,6 +13,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    
+
     env:
       API: ./src/AppForSEII.API/AppForSEII.API.csproj
       WEB: ./src/AppForSEII.Web/AppForSEII.Web.csproj
@@ -33,7 +35,7 @@ jobs:
           dotnet restore ${{ env.API }} 
           dotnet restore ${{ env.WEB }}  
           dotnet restore ${{ env.UT }}  
-          dotnet restore ${{ env.UIT }}  
+          dotnet restore ${{ env.UIT }}    
           
       - name: Build the solution
         run: |
