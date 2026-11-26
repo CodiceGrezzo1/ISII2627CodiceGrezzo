@@ -125,6 +125,27 @@ public class CreateReserva_test : AppForSEII4SqliteUT
 
     public static IEnumerable<object[]> ErroresDeValidacion()
     {
+
+
+
+
+
+
+        yield return new object[]
+        {
+            new ReservaForCreateDTO(ClienteUserName, "Al", "Navarro Martinez", "Calle MAyor1",
+             MetodoPago.paypal, new List<LineaReservaForCreateDTO> { new LineaReservaForCreateDTO(Impresora1Id, TiempoReserva.UnaHora)}),
+            "NombreCliente", "El nombre del cliente debe de tener minimo 3 caracteres"
+        };
+
+
+
+
+
+
+
+
+
         // Flujo alternativo 5: ninguna impresora seleccionada
         yield return new object[]
         {
@@ -136,7 +157,7 @@ public class CreateReserva_test : AppForSEII4SqliteUT
         // El usuario no está registrado como cliente
         yield return new object[]
         {
-            new ReservaForCreateDTO("nadie@uclm.es", "Elena", "Navarro Martínez", "Calle Mayor 1, Albacete",
+            new ReservaForCreateDTO("nadie@uclm.es", "Elena", "Navarro Martínez", "Calle Mayor 1",
                 MetodoPago.paypal, new List<LineaReservaForCreateDTO> { new LineaReservaForCreateDTO(Impresora1Id, TiempoReserva.UnaHora) }),
             "Cliente",
             "Error! El usuario no está registrado como cliente"

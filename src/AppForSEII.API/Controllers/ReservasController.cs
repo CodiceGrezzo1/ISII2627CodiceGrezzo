@@ -73,6 +73,19 @@ public class ReservasController : ControllerBase
         if (reservaForCreate.Lineas.Count == 0)
             ModelState.AddModelError("Lineas", "Error! Debe incluir al menos una impresora para reservar");
 
+
+
+
+
+        if (reservaForCreate.NombreCliente.Length < 3)
+        ModelState.AddModelError("NombreCliente", "El nombre del cliente debe de tener minimo 3 caracteres");
+
+
+
+
+
+
+
         // El cliente debe estar registrado como Cliente
         var cliente = await _context.ApplicationUsers.OfType<Cliente>()
             .FirstOrDefaultAsync(c => c.UserName == reservaForCreate.ClienteUserName);
