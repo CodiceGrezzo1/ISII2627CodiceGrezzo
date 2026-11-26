@@ -63,6 +63,10 @@ public class CreateCompraModelo3D_test : AppForSEII4SqliteUT
                 new LineaCompraModeloForCreateDTO(1, 1),
                 new LineaCompraModeloForCreateDTO(1, 99),
             });
+        var nombreIgualaCliente=new CompraModelo3DForCreateDTO("Cliente", _apellidos, _userName, _direccion, null,
+            MetodoPago.tarjetaCredito,
+            new List<LineaCompraModeloForCreateDTO>() { new LineaCompraModeloForCreateDTO(1, 99) });
+
 
         return new List<object[]>
         {
@@ -70,6 +74,7 @@ public class CreateCompraModelo3D_test : AppForSEII4SqliteUT
             new object[] { "noexiste@test.com", compraValida, "Error! Client is not registered" },
             new object[] { _userName, modeloNoExiste, "Error! El modelo 3D indicado no existe" },
             new object[] { _userName, unaValidaOtraNoExiste, "Error! El modelo 3D indicado no existe" },
+            new object[]{_userName,nombreIgualaCliente,"Error!Cliente no es un nombre valido"},
         };
     }
 
